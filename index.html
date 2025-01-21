@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudantes de LCC3T</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<body style="font-family: Arial, sans-serif;">
+    <div class="container-principal" id="wave-effect">
+
+        <!-- Lado esquerdo com o formulário e logotipo -->
+        <div class="left-side">
+            <!-- Logotipo -->
+            <div class="logo-container">
+                <img src="unnamed.png" alt="Logo do Imetro" class="logo">
+            </div>
+            
+            <form id="studentForm">
+                <div class="titulo">
+                    <center>
+                        <h2 style="font-size: 200%;">LCC3T DA IMETRO</h2><br>
+                    </center>
+                </div>
+                <div class="form-group">
+                    <label for="name">Nome do Estudante</label>
+                    <input type="text" id="name" placeholder="Nome do estudante" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="matricula">Número de Matrícula</label>
+                    <input type="text" id="matricula" placeholder="Número de matrícula" >
+                </div>
+                
+                <div class="atribuicao-notas">
+                    <div class="form-group esnopo">
+                        <label for="grade1">Nota 1</label>
+                        <input type="number" id="grade1" placeholder="Nota 1" value="0">
+                    </div>
+                    
+                    <div class="form-group esnopo">
+                        <label for="grade2">Nota 2</label>
+                        <input type="number" id="grade2" placeholder="Nota 2" value="0">
+                    </div>
+                    
+                    <div class="form-group esnopo">
+                        <label for="grade3">Nota 3</label>
+                        <input type="number" id="grade3" placeholder="Nota 3" value="0">
+                    </div>
+                    
+                    <div class="form-group esnopo">
+                        <label for="average">Media</label>
+                        <input type="text" id="average" placeholder="Media" value="0" disabled>
+                        
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" onclick="clearForm()" style="display: none;">Limpar</button>
+                    <button type="button" onclick="atualizarNota()">Guardar</button>
+                    <button type="button" onclick="viewGrades()">Consultar</button>
+                </div>
+            </form>
+            <br><br>
+            <!-- Hora exibida dinamicamente -->
+            <div class="time-container">
+                <span>Hora de acesso: </span>
+                <span id="current-time"></span>
+            </div>
+            
+        </div>
+        
+        
+        
+        <!-- Lado direito com a imagem gif -->
+        <div class="right-side">
+            <img src="http://www.imetroangola.com/img/3.jpeg" alt="Imagem Animada">
+            
+            <div id="menu" class="dropdown">
+                <!-- Ícone do menu principal -->
+                <i class="fa-solid fa-bars dropdown-toggle" id="menuDropdown" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            
+                <!-- Itens do dropdown -->
+                <ul class="dropdown-menu" aria-labelledby="menuDropdown">
+                    <li>
+                        <a class="dropdown-item" href="#" id="cadastrarAluno">
+                            <i class="fa-solid fa-user-plus"></i> Cadastrar Aluno
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" id="verListaAlunos">
+                            <i class="fa-solid fa-list"></i> Ver Lista de Alunos
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" id="mudarLayout" data-layout="left-right">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i> Mudar Layout
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" id="limparDados">
+                            <i class="fa-solid fa-recycle"></i>Limpar Dados
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!--<div id="menu">-->
+            <!--    <i class="fa-solid fa-bars"></i>-->
+            <!--    <div class="mudar-layout" data-layout="left-right">-->
+            <!--        <i class="fa-solid fa-arrow-right-arrow-left" class="mudar-layout-icon"></i>-->
+            <!--    </div>-->
+            <!--</div>-->
+            
+
+            <!-- Cadastramento de Alunos -->
+            <div id="cadastramentoAluno" >
+                
+                <!-- Ícone de fechamento -->
+                <i class="fas fa-times" id="fecharForm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; color: #333;"></i>
+                
+                <!-- Título do formulário -->
+                <h3 style="text-align: center; margin-bottom: 20px;">Cadastrar Aluno</h3>
+                
+                <!-- Campo Nome -->
+                <div class="form-group">
+                  <label for="cadastramentoNome">Nome</label>
+                  <input type="text" id="cadastramentoNome" placeholder="Nome do estudante">
+                </div>
+                
+                <!-- Campo Número de Matrícula -->
+                <div class="form-group" style="margin-top: 15px;">
+                  <label for="cadastramentoMatricula">Número de Matrícula</label>
+                  <input type="number" id="cadastramentoMatricula" placeholder="Número de matrícula">
+                </div>
+                
+                <!-- Botão Guardar -->
+                <div style="text-align: center; margin-top: 20px;">
+                  <button id="guardarAluno" >
+                    Guardar
+                  </button>
+                  <button id="atualizarAluno" style="display: none;">
+                    Atualizar Dados
+                  </button>
+                </div>
+            </div>
+              
+            
+            <!-- Lista de Alunos -->
+             <div id="listaAlunos" style="display: none;">
+                <span class="close" onclick="">&times;</span>
+                <h3 style="text-align: center; margin-bottom: 20px;">Lista de Alunos</h3>
+                <table id="tabelaAlunos">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+             </div>
+
+
+            <!-- Janela popup para exibir as notas -->
+            <div id="popup" class="popup">
+                <div class="popup-content">
+                    <span class="close" onclick="closePopup()">&times;</span>
+                    <h3>Notas dos Estudantes</h3>
+                    <table id="resultList">
+                        <thead>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                            <th>Nota</th>
+                            <th>Status</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; LCC3T Angola 2024 <br></br>
+        <a href="http://www.imetroangola.com" target="_blank" style="color: white; text-decoration: underline;">Visite nosso site</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
