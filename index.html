@@ -96,7 +96,7 @@
                     </li>
                     <li>
                         <a class="dropdown-item" href="#" id="mudarLayout" data-layout="left-right">
-                            <i class="fa-solid fa-arrow-right-arrow-left"></i> Mudar Layout
+                            <i class="fa-solid fa-arrow-right-arrow-left" data-layout="left-right"></i> Mudar Layout
                         </a>
                     </li>
                     <li>
@@ -146,7 +146,7 @@
               
             
             <!-- Lista de Alunos -->
-             <div id="listaAlunos" style="display: none;">
+             <div id="listaAlunos" class="temLeft" style="display: none;">
                 <span class="close" onclick="fecharContainer('#listaAlunos')">&times;</span>
                 <h3 style="text-align: center; margin-bottom: 20px;">Lista de Alunos</h3>
                 <table id="tabelaAlunos">
@@ -197,7 +197,7 @@
 
             <!-- Janela popup para exibir as notas -->
             <div id="popup" class="popup">
-                <div class="popup-content">
+                <div class="popup-content temLeft">
                     <span class="close" onclick="closePopup()">&times;</span>
                     <h3>Notas dos Estudantes</h3>
                     <table id="resultList">

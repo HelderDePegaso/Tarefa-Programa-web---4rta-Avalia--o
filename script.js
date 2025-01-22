@@ -107,6 +107,11 @@ function viewGrades() {
         resultList.innerHTML = "<li>Nenhum dado disponível.</li>";
         document.getElementById("popup").style.display = "flex";
     }
+
+    // Fechar todos os container possíveis
+    fecharContainer("#cadastramentoAluno")
+    fecharContainer("#listaAlunos")
+    fecharContainer("#atualizacaoAluno")
 }
 
 // Função para fechar o popup
@@ -142,16 +147,27 @@ let mudarLayoutIcon = document.body.getElementsByClassName("mudar-layout-icon")[
 mudarLayout.addEventListener("click", (event) => {
     console.log(event)
     let waveEffect = document.getElementById("wave-effect");
-    let layout = event.target.offsetParent.dataset.layout;
+    let layout = ""
+    
+    if(event.target.dataset.layout)
+      layout = event.target.dataset.layout
+    else
+      layout = event.target.offsetParent.dataset.layout;
 
     waveEffect.classList.toggle("right-left-layout")
 
     if (layout === "left-right") {
         mudarLayout.setAttribute("data-layout", "right-left")
+        document.querySelector("#listaAlunos").classList.remove("temLeft")
+        document.querySelector(".popup-content").classList.remove("temLeft")
+        document.querySelector(".popup-content").classList.add("left-90px")
         //waveEffect.classList.remove("right-left-layout")
          
     } else {
         mudarLayout.setAttribute("data-layout", "left-right")
+        document.querySelector("#listaAlunos").classList.add("temLeft")
+        document.querySelector(".popup-content").classList.add("temLeft")
+        document.querySelector(".popup-content").classList.remove("left-90px")
         //waveEffect.classList.add("right-left-layout")
     }
 })
@@ -255,6 +271,16 @@ function capturarDados() {
 function exibirDados() {
   const dados = capturarDados();
   console.log("Dados capturados:", dados);
+}
+
+// Função para limpar campos da atribuição de notas
+function limparCamposGrades() {
+  document.getElementById("name").value = "";
+  document.getElementById("matricula").value = "";
+  document.getElementById("grade1").value = "";
+  document.getElementById("grade2").value = "";
+  document.getElementById("grade3").value = "";
+  document.getElementById("average").value = "";
 }
 
 
@@ -448,6 +474,10 @@ function excluirAluno(matricula) {debugger
           students.splice(index, 1);
           persistirDados();
       
+          
+          if(document.querySelector("input#matricula").value == matricula)
+            limparCamposGrades();
+          
           // Atualiza a tabela após a exclusão
           preencherTabelaAlunos();
       } else {
