@@ -141,16 +141,13 @@
                   <button id="guardarAluno" >
                     Guardar
                   </button>
-                  <button id="atualizarAluno" style="display: none;">
-                    Atualizar Dados
-                  </button>
                 </div>
             </div>
               
             
             <!-- Lista de Alunos -->
              <div id="listaAlunos" style="display: none;">
-                <span class="close" onclick="">&times;</span>
+                <span class="close" onclick="fecharContainer('#listaAlunos')">&times;</span>
                 <h3 style="text-align: center; margin-bottom: 20px;">Lista de Alunos</h3>
                 <table id="tabelaAlunos">
                     <thead>
@@ -167,6 +164,36 @@
                 </table>
              </div>
 
+            
+            
+            <!-- Atulizacao de Alunos -->
+            <div id="atualizacaoAluno" style="display: none;">
+                
+                <!-- Ícone de fechamento -->
+                <i class="fas fa-times" onclick="cancelarAtualizacaoAluno()" style="position: absolute; top: 10px; right: 10px; cursor: pointer; color: #333;"></i>
+                
+                <!-- Título do formulário -->
+                <h3 style="text-align: center; margin-bottom: 20px;">Atualizar Aluno</h3>
+                
+                <!-- Campo Nome -->
+                <div class="form-group">
+                  <label for="atualizacaoNome">Nome</label>
+                  <input type="text" id="atualizacaoNome" placeholder="Nome do estudante">
+                </div>
+                
+                <!-- Campo Número de Matrícula -->
+                <div class="form-group" style="margin-top: 15px;">
+                  <label for="atualizacaoMatricula">Número de Matrícula</label>
+                  <input type="number" id="atualizacaoMatricula" placeholder="Número de matrícula">
+                </div>
+                
+                <!-- Botão Atualizar -->
+                <div style="text-align: center; margin-top: 20px;">
+                  <button id="atualizarAluno" >
+                    Atualizar Dados
+                  </button>
+                </div>
+            </div>
 
             <!-- Janela popup para exibir as notas -->
             <div id="popup" class="popup">

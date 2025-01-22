@@ -201,6 +201,10 @@ footer {
 
 /* Novas mudanças */
 
+.dropdown-toggle::after {
+    display: none !important;
+}
+
 #menu {
     position: absolute;
     top: 10px;
@@ -247,7 +251,7 @@ footer {
     flex-grow: .5;
 }
 
-#cadastramentoAluno {
+#cadastramentoAluno, #atualizacaoAluno {
     border: 1px solid #ccc;
     padding: 20px;width: 300px;
     position: absolute;
@@ -258,7 +262,7 @@ footer {
 }
 
 
-#cadastramentoAluno input {
+#cadastramentoAluno input, #atualizacaoAluno input {
     width: 100%;
     padding: 8px; 
     margin-top: 5px; 
@@ -266,7 +270,7 @@ footer {
     border-radius: 4px;
 }
 
-#guardarAluno {
+#guardarAluno , #atualizarAluno {
     padding: 10px 20px; 
     background-color: #007bff; 
     color: white; 

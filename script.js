@@ -6,32 +6,32 @@ window.addEventListener("load", () => {
   if(!localStorage.getItem("students"))  {
     localStorage.setItem("students", JSON.stringify([]))
     
-
+    
     // Esses dados são armazenados prepositadamente para o professor testar partes do projeto que dependem dele
-    localStorage.setItem("students", JSON.stringify(
-      [
-        {
-          name: "João Baptista",
-          matricula: "20220456",
-          grade: [10, 10, 10],
-          status: "Aprovado"
-        } , 
-        
-        {
-          name: "Maria Joiana Mateus",
-          matricula: "20210789",
-          grade: [7, 7, 7],
-          status: "Reprovado"
-        } , 
+    //localStorage.setItem("students", JSON.stringify(
+    //  [
+    //    {
+    //      name: "João Baptista",
+    //      matricula: "20220456",
+    //      grade: [10, 10, 10],
+    //      status: "Aprovado"
+    //    } , 
+    //    
+    //    {
+    //      name: "Maria Joiana Mateus",
+    //      matricula: "20210789",
+    //      grade: [7, 7, 7],
+    //      status: "Reprovado"
+    //    } , 
 
-        {
-          name: "Pedro Joaquim",
-          matricula: "789",
-          grade: [8, 8, 8],
-          status: "Recurso"
-        }
-      ])
-    )
+    //    {
+    //      name: "Pedro Joaquim",
+    //      matricula: "789",
+    //      grade: [8, 8, 8],
+    //      status: "Recurso"
+    //    }
+    //  ])
+    //)
 
 
     //
@@ -97,7 +97,7 @@ function viewGrades() {
                 <td> ${++controler} </td>
                 <td> ${student.name} </td>
                 <td> ${student.matricula} </td> 
-                <td> ${student.grade} </td>
+                <td> ${((student.grades[0] + student.grades[1] + student.grades[2]) / 3).toFixed(2)} </td>
                 <td> ${student.status} </td>
             `;
             resultList.appendChild(listItem);
@@ -292,7 +292,6 @@ document.getElementById("guardarAluno").addEventListener("click", function () {
   persistirDadosDeCadastramento({name: nome, matricula: matricula});
 });
 
-
 // Recebe dados que estão sendo cadastrados e persiste-os no localStorage
 function persistirDadosDeCadastramento(aluno) {
   
@@ -305,6 +304,39 @@ function persistirDadosDeCadastramento(aluno) {
     loadSavedGrades();
 }
 
+// Armazena a matricula do aluno a ser atualizado
+var aAtualizarMatricula = "";
+
+// Função para capturar os dados de atualização e atualizar o aluno
+document.getElementById("atualizarAluno").addEventListener("click", function () {
+  const nome = document.getElementById("atualizacaoNome").value.trim();
+  const matricula = document.getElementById("atualizacaoMatricula").value.trim();
+  debugger
+  if (!nome || !matricula) {
+    alert("Por favor, preencha todos os campos.");
+    return;
+  }
+
+  console.log("Aluno atualizado:");
+  console.log("Nome:", nome);
+  console.log("Matrícula:", matricula);
+  
+  document.getElementById("atualizacaoNome").value = "";
+  document.getElementById("atualizacaoMatricula").value = "";
+  alert("Aluno atualizado com sucesso!");
+  
+  atualizarAluno({name: nome, matricula: matricula});
+})
+
+// Função para persistir os dados de atualização do aluno
+function atualizarAluno(aluno) {
+  let alunos = JSON.parse(localStorage.getItem("students")) || [];
+  const index = alunos.findIndex(aluno => aluno.matricula === aAtualizarMatricula);
+  alunos[index].name = aluno.name;
+  alunos[index].matricula = aluno.matricula;
+  localStorage.setItem("students", JSON.stringify(alunos));
+  loadSavedGrades();
+}
 
 // Função para atualizar nota de aluno
 function atualizarNota() {
@@ -320,6 +352,12 @@ function atualizarNota() {
     aluno.grades[0] = parseFloat(grade1);
     aluno.grades[1] = parseFloat(grade2);
     aluno.grades[2] = parseFloat(grade3);
+
+    let average = (aluno.grades[0] + aluno.grades[1] + aluno.grades[2]) / 3;
+    
+    if(average < 7) aluno.status = "Reprovado"; 
+    else if(average >= 7 && average < 10) aluno.status = "Recurso";
+    else if(average >= 10) aluno.status = "Aprovado";
 
     students[index] = aluno
     localStorage.setItem("students", JSON.stringify(students));
@@ -374,58 +412,88 @@ function preencherTabelaAlunos() {
 
 
 // Função para editar aluno
-function editarAluno(matricula) {
+function editarAluno(matricula) {debugger
+  aAtualizarMatricula = matricula
   // Localiza o aluno na lista de students pela matrícula
   const aluno = students.find(student => student.matricula === matricula);
 
   // Verifica se o aluno foi encontrado
   if (aluno) {
       // Obtém os campos de input
-      const inputNome = document.querySelector('#cadastramentoNome');
-      const inputMatricula = document.querySelector('#cadastramentoMatricula');
+      const inputNome = document.querySelector('#atualizacaoNome');
+      const inputMatricula = document.querySelector('#atualizacaoMatricula');
 
       // Preenche os valores dos inputs
       inputNome.value = aluno.name;
       inputMatricula.value = aluno.matricula;
+      
+      fecharContainer("#listaAlunos")
+      abrirContainer("#atualizacaoAluno")
   } else {
-      console.error(`Aluno com matrícula ${matricula} não encontrado.`);
+      alert(`Aluno com matrícula ${matricula} não encontrado.`);
   }
 }
 
 // Função para excluir aluno
-function excluirAluno(matricula) {
+function excluirAluno(matricula) {debugger
   // Encontra o índice do aluno pela matrícula
   const index = students.findIndex(student => student.matricula === matricula);
 
   // Verifica se o aluno existe
   if (index !== -1) {
-      // Remove o aluno do array
-      students.splice(index, 1);
-
-      // Atualiza a tabela após a exclusão
-      preencherTabelaAlunos();
+      // Alerta para confirmar a exclusão
+      if (confirm(`Deseja excluir o aluno com matrícula ${matricula}?`)) {
+          alert(`Aluno com matrícula ${matricula} foi excluído com sucesso!`);
+          // Remove o aluno do array
+          students.splice(index, 1);
+          persistirDados();
+      
+          // Atualiza a tabela após a exclusão
+          preencherTabelaAlunos();
+      } else {
+          alert(`Exclusão de aluno com matrícula ${matricula} foi cancelada.`);
+      }
   } else {
       console.error(`Aluno com matrícula ${matricula} não encontrado para exclusão.`);
   }
 }
 
 
-function alternarUsoDoEscondido() {
-  document.querySelector("#cadastramentoAluno")
-}
-
 
 // Função para ver lista de alunos
 document.getElementById("verListaAlunos").addEventListener("click", () => {
   console.log("Ver lista de alunos")
-  document.getElementById("listaAlunos").style.display = "block";
-  document.getElementById("cadastramentoAluno").style.display = "none";
+  abrirContainer("#listaAlunos")
+  fecharContainer("#cadastramentoAluno")
   preencherTabelaAlunos();
 })
 
 
 document.getElementById("cadastrarAluno").addEventListener("click", (event) => {
   console.log("Cadastrar aluno")
-  document.getElementById("cadastramentoAluno").style.display = "block";
-  document.getElementById("listaAlunos").style.display = "none";
+  abrirContainer("#cadastramentoAluno")
+  fecharContainer("#listaAlunos")
 })
+
+
+
+function fecharContainer(container) {
+  document.querySelector(container).style.display = "none";
+}
+
+function abrirContainer(container) {
+  document.querySelector(container).style.display = "block";
+}
+
+
+// Persistir mudanças completas no localStorage
+function persistirDados() {
+  localStorage.setItem("students", JSON.stringify(students));
+}
+
+function cancelarAtualizacaoAluno() {
+  aAtualizarMatricula = ''
+  document.querySelector("#atualizacaoMatricula").value = ''
+  document.querySelector("#atualizacaoNome").value = ''
+  fecharContainer('#atualizacaoAluno')
+}
